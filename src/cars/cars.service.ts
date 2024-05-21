@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { Car } from './entities/car.entity';
 
 @Injectable()
 export class CarsService {
+  private readonly cars: Car[] = []
+  private id: number = 1;
+
   create(createCarDto: CreateCarDto) {
-    return 'This action adds a new car';
+    const newCar = {
+      id: this.id,
+      brand: createCarDto.brand,
+      model: createCarDto.model,
+      year: createCarDto.year
+    };
+    this.id = this.id + 1;
   }
 
   findAll() {
