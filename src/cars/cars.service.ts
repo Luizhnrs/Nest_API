@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { Car } from './entities/car.entity';
@@ -26,14 +26,40 @@ export class CarsService {
   }
 
   findOne(id: number) {
-    return this.cars.find((car) => car.id === id);
+    const car = this.cars.find((car) => car.id === id);
+
+    if(car.id === null || !car)
+      {
+        throw new NotFoundException("Car id cannot be null or don't exists");
+      }
+
+    return car;
   }
 
   update(id: number, updateCarDto: UpdateCarDto) {
-    return `This action updates a #${id} car`;
+    const car = this.findOne(id);
+
+    if(car.id === null || !car){
+      throw new NotFoundException("This car cannot be updated, because is not exists");
+    }
+
+    car.brand = updateCarDto.brand
+    car.model = updateCarDto.model
+    car.year = updateCarDto.year
+    
+  
+    return;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} car`;
+    const car = this.findOne(id);
+    const carIndex = this.cars.findIndex((cars) => car.id === id);
+    this.cars.splice(carIndex, 1);
+
+    if(car.id === null || !car){
+      throw new NotFoundException("This car cannot be deleted, because is not exists");
+    }
+    
+    return car;
   }
 }
