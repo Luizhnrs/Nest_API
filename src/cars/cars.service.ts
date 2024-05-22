@@ -16,14 +16,17 @@ export class CarsService {
       year: createCarDto.year
     };
     this.id = this.id + 1;
+
+    this.cars.push(newCar);
+    return newCar;
   }
 
   findAll() {
-    return `This action returns all cars`;
+    return this.cars;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} car`;
+    return this.cars.find((car) => car.id === id);
   }
 
   update(id: number, updateCarDto: UpdateCarDto) {
